@@ -17,4 +17,5 @@ Route::post('login',[\App\Http\Controllers\IniciarSesionController::class,'inici
 
 Route::middleware(['jwt'])->group(function () {
     Route::resource('usuarios', \App\Http\Controllers\UsuariosController::class, ['except' => ['create', 'edit']]);
+    Route::resource('articulos', \App\Http\Controllers\ArticulosController::class, ['except' => ['create', 'edit']]);
 });
