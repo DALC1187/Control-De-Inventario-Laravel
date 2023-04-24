@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('login',[\App\Http\Controllers\IniciarSesionController::class,'iniciar']);
 
 Route::middleware(['jwt'])->group(function () {
+
+    Route::post('articulos/buscador',[\App\Http\Controllers\ArticulosController::class,'buscador']);
+
     Route::resource('usuarios', \App\Http\Controllers\UsuariosController::class, ['except' => ['create', 'edit']]);
     Route::resource('articulos', \App\Http\Controllers\ArticulosController::class, ['except' => ['create', 'edit']]);
+    Route::resource('promociones', \App\Http\Controllers\PromocionesController::class, ['except' => ['create', 'edit']]);
+    Route::resource('siniestros', \App\Http\Controllers\SiniestrosController::class, ['except' => ['create', 'edit']]);
 });
