@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMerma extends Migration
+class CreateArticulosStock extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateMerma extends Migration
      */
     public function up()
     {
-        Schema::create('mermas', function (Blueprint $table) {
+        Schema::create('articulos_stock', function (Blueprint $table) {
             $table->id();
             $table->integer('idArticulo');
             $table->integer('cantidad');
-            $table->string('tipoMerma');
-            $table->string('tipoDano')->nullable();
-            $table->string('cambioProveedor')->nullable();
-            $table->integer('idArticuloEntregado')->nullable();
-            $table->integer('cantidadEntregado')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ class CreateMerma extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mermas');
+        Schema::dropIfExists('articulos_stock');
     }
 }

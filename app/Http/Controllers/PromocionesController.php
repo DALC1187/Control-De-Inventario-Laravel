@@ -15,7 +15,7 @@ class PromocionesController extends Controller
      */
     public function index()
     {
-        $promociones = DB::table('promociones')->get();
+        $promociones = DB::table('promociones')->where('eliminado', '=', 0)->get();
         return response()->json($promociones);
     }
 
@@ -27,7 +27,7 @@ class PromocionesController extends Controller
      */
     public function store(Request $request)
     {
-        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigenciaInicial" => $request['vigenciaInicial'], "vigenciaFinal" => $request['vigenciaFinal'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
+        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigenciaInicial" => $request['vigenciaInicial'], "vigenciaFinal" => $request['vigenciaFinal'], 'idArticulo' => $request['idArticulo'], 'cantidad' => $request['cantidad'], 'costo' => $request['costo'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
         DB::table('promociones')->insert($promociones);
         return response()->json(['result' => 'ok']);
     }
@@ -40,7 +40,7 @@ class PromocionesController extends Controller
      */
     public function show($id)
     {
-        $promociones = DB::table('promociones')->where('id', '=', $id)->first();
+        $promociones = DB::table('promociones')->where('id', '=', $id)->where('eliminado', '=', 0)->first();
         return response()->json($promociones);
     }
 
@@ -53,8 +53,8 @@ class PromocionesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigenciaInicial" => $request['vigenciaInicial'], "vigenciaFinal" => $request['vigenciaFinal']];
-        DB::table('promociones')->where('id', '=', $id)->update($promociones);
+        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigenciaInicial" => $request['vigenciaInicial'], "vigenciaFinal" => $request['vigenciaFinal'], 'idArticulo' => $request['idArticulo'], 'cantidad' => $request['cantidad'], 'costo' => $request['costo']];
+        DB::table('promociones')->where('id', '=', $id)->where('eliminado', '=', 0)->update($promociones);
         return response()->json(['result' => 'ok']);
     }
 
@@ -66,7 +66,7 @@ class PromocionesController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('promociones')->where('id', '=', $id)->delete();
+        DB::table('promociones')->where('id', '=', $id)->update(['eliminado' => 1]);
         return response()->json(['result' => 'ok']);
     }
 }

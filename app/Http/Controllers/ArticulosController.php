@@ -15,7 +15,7 @@ class ArticulosController extends Controller
      */
     public function index()
     {
-        $articulos = DB::table('articulos')->get();
+        $articulos = DB::table('articulos')->where('eliminado', '=', 0)->get();
         return response()->json($articulos);
     }
 
@@ -27,8 +27,10 @@ class ArticulosController extends Controller
      */
     public function store(Request $request)
     {
-        $articulos=['nombre' => $request['nombre'], 'costoPieza' => $request['costoPieza'], 'numPiezaPaquete' => $request['numPiezaPaquete'], 'stockInicial' => $request['stockInicial'], 'clasificacion' => $request['clasificacion'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
-        DB::table('articulos')->insert($articulos);
+        $articulos=['nombre' => $request['nombre'], 'costoPieza' => $request['costoPieza'], 'numPiezaPaquete' => $request['numPiezaPaquete'], 'clasificacion' => $request['clasificacion'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
+        $id = DB::table('articulos')->insertGetId($articulos);
+        $articulosStock = ['idArticulo' => $id, 'cantidad' => $request['stockInicial'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
+        DB::table('articulos_stock')->insert($articulosStock);
         return response()->json(['result' => 'ok']);
     }
 
@@ -40,7 +42,7 @@ class ArticulosController extends Controller
      */
     public function show($id)
     {
-        $articulo = DB::table('articulos')->where('id', '=', $id)->first();
+        $articulo = DB::table('articulos')->where('id', '=', $id)->where('eliminado', '=', 0)->first();
         return response()->json($articulo);
     }
 
@@ -53,8 +55,8 @@ class ArticulosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $articulos=['nombre' => $request['nombre'], 'costoPieza' => $request['costoPieza'], 'numPiezaPaquete' => $request['numPiezaPaquete'], 'stockInicial' => $request['stockInicial'], 'clasificacion' => $request['clasificacion']];
-        DB::table('articulos')->where('id', '=', $id)->update($articulos);
+        $articulos=['nombre' => $request['nombre'], 'costoPieza' => $request['costoPieza'], 'numPiezaPaquete' => $request['numPiezaPaquete'], 'clasificacion' => $request['clasificacion']];
+        DB::table('articulos')->where('id', '=', $id)->where('eliminado', '=', 0)->update($articulos);
         return response()->json(['result' => 'ok']);
     }
 
@@ -66,14 +68,14 @@ class ArticulosController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('articulos')->where('id', '=', $id)->delete();
+        DB::table('articulos')->where('id', '=', $id)->update(['eliminado' => 1]);
         return response()->json(['result' => 'ok']);
     }
 
     public function buscador(Request $request)
     {
         $texto = $request['texto'];
-        $articulos = DB::table('articulos')->where('nombre', 'like','%'.$texto.'%')->get();
+        $articulos = DB::table('articulos')->where('nombre', 'like','%'.$texto.'%')->where('eliminado', '=', 0)->get();
         return response()->json($articulos);
     }
 }

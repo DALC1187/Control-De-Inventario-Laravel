@@ -19,6 +19,10 @@ class CreatePromociones extends Migration
             $table->string("descripcion");
             $table->date("vigenciaInicial");
             $table->date("vigenciaFinal");
+            $table->integer('idArticulo');
+            $table->integer('cantidad');
+            $table->double('costo', 12,2);
+            $table->boolean('eliminado')->default(0);
             $table->timestamps();
         });
     }

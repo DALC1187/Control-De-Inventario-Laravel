@@ -18,8 +18,8 @@ class CreateArticulosTable extends Migration
             $table->string('nombre');
             $table->double('costoPieza', 12,2);
             $table->integer('numPiezaPaquete');
-            $table->integer('stockInicial');
             $table->string('clasificacion');
+            $table->boolean('eliminado')->default(0);
             $table->timestamps();
         });
     }
