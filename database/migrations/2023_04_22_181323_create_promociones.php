@@ -17,7 +17,8 @@ class CreatePromociones extends Migration
             $table->id();
             $table->string("nombre");
             $table->string("descripcion");
-            $table->date("vigencia");
+            $table->date("vigenciaInicial");
+            $table->date("vigenciaFinal");
             $table->timestamps();
         });
     }

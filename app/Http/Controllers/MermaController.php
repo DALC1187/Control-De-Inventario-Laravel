@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
-class SiniestrosController extends Controller
+class MermaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,17 +26,8 @@ class SiniestrosController extends Controller
      */
     public function store(Request $request)
     {
-        $ministro = Str::uuid()->toString().'.jpg';
-        $supervisor = Str::uuid()->toString().'.jpg';
-        Storage::disk('public')->put($ministro, base64_decode($request['hoja_ministro']));
-        Storage::disk('public')->put($supervisor, base64_decode($request['hora_supervisor']));
-        $info=['fecha' => $request['fecha'], 'hora' => $request['hora'], 'tipo' => $request['tipo'], 'descripcion' => $request['descripcion'], 'hoja_ministro' => $ministro, 'hoja_supervisor' => $supervisor, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
-        $id = DB::table('siniestros')->insertGetId($info);
-        $articulos = json_decode($request['articulos']);
-        foreach ($articulos as $articulo){
-            $a = ['idSiniestro' => $id, 'idArticulo' => $articulo->id, 'cantidad' => $articulo->cantidad];
-            DB::table('articulos_siniestros')->insert($a);
-        }
+        $merma = ['idArticulo' => $request['idArticulo'], 'cantidad' => $request['cantidad'], 'tipoMerma' => $request['tipoMerma'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
+        DB::table('mermas')->insert($merma);
         return response()->json(['result' => 'ok']);
     }
 

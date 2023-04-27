@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,7 @@ return response()->json($usuarios);
      */
     public function store(Request $request)
     {
-    $usuario=['email' => $request['email'], 'nombre' => $request['nombre'], 'apellido_paterno' => $request['apellido_paterno'], 'apellido_materno' => $request['apellido_materno'], 'tipo_usuario' => $request['tipo_usuario'], 'password' => bcrypt($request['password'])];
+    $usuario=['email' => $request['email'], 'nombre' => $request['nombre'], 'apellido_paterno' => $request['apellido_paterno'], 'apellido_materno' => $request['apellido_materno'], 'tipo_usuario' => $request['tipo_usuario'], 'password' => bcrypt($request['password']), 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
 DB::table('users')->insert($usuario);
     return response()->json(['result' => 'ok']);
     }
@@ -53,8 +54,14 @@ return response()->json($usuario);
      */
     public function update(Request $request, $id)
     {
-$usuario=['email' => $request['email'], 'nombre' => $request['nombre'], 'apellido_paterno' => $request['apellido_paterno'], 'apellido_materno' => $request['apellido_materno'], 'tipo_usuario' => $request['tipo_usuario'], 'password' => bcrypt($request['password'])];
-DB::table('users')->where('id', '=', $id)->update($usuario);
+        if($request['password'] && $request['password'] != ""){
+        $usuario=['email' => $request['email'], 'nombre' => $request['nombre'], 'apellido_paterno' => $request['apellido_paterno'], 'apellido_materno' => $request['apellido_materno'], 'tipo_usuario' => $request['tipo_usuario'], 'password' => bcrypt($request['password'])];
+        DB::table('users')->where('id', '=', $id)->update($usuario);
+        }else{
+        $usuario=['email' => $request['email'], 'nombre' => $request['nombre'], 'apellido_paterno' => $request['apellido_paterno'], 'apellido_materno' => $request['apellido_materno'], 'tipo_usuario' => $request['tipo_usuario']];
+        DB::table('users')->where('id', '=', $id)->update($usuario);
+        }
+
 
 return response()->json(['result' => 'ok']);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +27,7 @@ class PromocionesController extends Controller
      */
     public function store(Request $request)
     {
-        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigencia" => $request['vigencia']];
+        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigenciaInicial" => $request['vigenciaInicial'], "vigenciaFinal" => $request['vigenciaFinal'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
         DB::table('promociones')->insert($promociones);
         return response()->json(['result' => 'ok']);
     }
@@ -52,7 +53,7 @@ class PromocionesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigencia" => $request['vigencia']];
+        $promociones = ["nombre" => $request['nombre'], "descripcion" => $request["descripcion"], "vigenciaInicial" => $request['vigenciaInicial'], "vigenciaFinal" => $request['vigenciaFinal']];
         DB::table('promociones')->where('id', '=', $id)->update($promociones);
         return response()->json(['result' => 'ok']);
     }

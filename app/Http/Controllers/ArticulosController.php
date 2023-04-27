@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +27,7 @@ class ArticulosController extends Controller
      */
     public function store(Request $request)
     {
-        $articulos=['nombre' => $request['nombre'], 'costoPieza' => $request['costoPieza'], 'numPiezaPaquete' => $request['numPiezaPaquete'], 'stockInicial' => $request['stockInicial'], 'clasificacion' => $request['clasificacion']];
+        $articulos=['nombre' => $request['nombre'], 'costoPieza' => $request['costoPieza'], 'numPiezaPaquete' => $request['numPiezaPaquete'], 'stockInicial' => $request['stockInicial'], 'clasificacion' => $request['clasificacion'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
         DB::table('articulos')->insert($articulos);
         return response()->json(['result' => 'ok']);
     }
