@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArticulosSiniestros extends Migration
+class CreateInventarios extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateArticulosSiniestros extends Migration
      */
     public function up()
     {
-        Schema::create('articulos_siniestros', function (Blueprint $table) {
+        Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
-            $table->integer('idSiniestro');
-            $table->integer('idArticulo');
-            $table->integer('cantidad');
-            $table->integer('idInventario')->nullable();
+            $table->double('subtotalVenta', 12,2)->nullable();
+            $table->double('totalVenta', 12,2)->nullable();
+            $table->dateTime('fechaInventario');
+            $table->boolean('general')->default(1);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateArticulosSiniestros extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articulos_siniestros');
+        Schema::dropIfExists('inventarios');
     }
 }

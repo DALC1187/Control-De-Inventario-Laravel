@@ -26,11 +26,15 @@ class MermaController extends Controller
      */
     public function store(Request $request)
     {
+        $articulosStock = DB::table('articulos_stock')->where('idArticulo', '=', $request['idArticulo'])->first();
+        if($request['cantidad'] > $articulosStock->cantidad){
+            return response()->json(['result' => 'La cantidad de articulos proporcionada es mayor contra la que se tiene en stock.']);
+        }
         $merma = ['idArticulo' => $request['idArticulo'], 'cantidad' => $request['cantidad'], 'tipoMerma' => $request['tipoMerma'], 'tipoDano' => $request['tipoDano'], 'cambioProveedor' => $request['cambioProveedor'], 'idArticuloEntregado' => $request['idArticuloEntregado'], 'cantidadEntregado' => $request['cantidadEntregado'], 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()];
         DB::table('mermas')->insert($merma);
         $articulosStock = DB::table('articulos_stock')->where('idArticulo', '=', $request['idArticulo'])->first();
         DB::table('articulos_stock')->where('idArticulo', '=', $request['idArticulo'])->update(['cantidad' => $articulosStock->cantidad - $request['cantidad']]);
-        if ($request['tipoMerma'] == "Dañado en embajale" || $request['tipoMerma'] == "Dañado en sucursal"){
+        if ($request['tipoMerma'] == "Dañado en embajale" || $request['tipoMerma'] == "Dañado en sucursal" && $request['cambioProveedor'] == 'Si'){
             $articulosStockCambio = DB::table('articulos_stock')->where('idArticulo', '=', $request['idArticuloEntregado'])->first();
             DB::table('articulos_stock')->where('idArticulo', '=', $request['idArticuloEntregado'])->update(['cantidad' => $articulosStockCambio->cantidad + $request['cantidadEntregado']]);
         }

@@ -15,7 +15,11 @@ class PromocionesController extends Controller
      */
     public function index()
     {
-        $promociones = DB::table('promociones')->where('eliminado', '=', 0)->get();
+        $promociones = DB::table('promociones')
+            ->select('promociones.id', 'promociones.nombre', 'promociones.descripcion', 'promociones.vigenciaInicial', 'promociones.vigenciaFinal', 'promociones.idArticulo', 'promociones.cantidad', 'promociones.costo', 'articulos.nombre as articulo')
+            ->where('promociones.eliminado', '=', 0)
+            ->join('articulos', 'promociones.idArticulo', '=','articulos.id')
+            ->get();
         return response()->json($promociones);
     }
 

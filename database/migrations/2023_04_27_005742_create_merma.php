@@ -22,6 +22,7 @@ class CreateMerma extends Migration
             $table->string('cambioProveedor')->nullable();
             $table->integer('idArticuloEntregado')->nullable();
             $table->integer('cantidadEntregado')->nullable();
+            $table->integer('idInventario')->nullable();
             $table->timestamps();
         });
     }
